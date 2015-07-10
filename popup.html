@@ -20,18 +20,39 @@
 	
 
 	<img src = 'pbl-logo-circle.png' height=35></img>
-    <h1>Add PBL Links</h1>
+    <h1>PBL Links</h1>
     <div id = 'message'></div>
     <div id = 'message2'></div>
+    <h5 id = 'lookup'>Lookup current URL</h5>
+    <h5 id = 'add-toggle'>Add a PBL Link</h5>
+    <div id = 'add-container'>
+	    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
+	    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
+	    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description'></input>
+	    <div id = 'directory-input-container'></div>
+	    <div class = 'btn-container'>
+	    	<button class = 'btn btn-primary' id = "save">Add New Link</button>
+	   		<!-- <button class = "btn btn-default pull-right" id = "lookup">Lookup URL</button> -->
+	   	</div>
+    </div>
+	<h5 id = 'create-directory-toggle'>Create New Directory</h5>
+	<div id = 'create-directory-container'>
+			
+		<input class = 'form-control' id = 'create-directory-input' type = 'text' placeholder = '/new/directory'></input>
+		<button class = 'btn btn-primary' id = "create-directory-btn">Create Directory</button>
 
-    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
-    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
-    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description'></input>
-    <div id = 'directory-input-container'></div>
-    <div class = 'btn-container'>
-    	<button class = 'btn btn-primary pull-left' id = "save">Add New Link</button>
-   		<button class = "btn btn-default pull-right" id = "lookup">Lookup URL</button>
-   	</div>
-		
+	</div>
+	<h5 id = 'search-toggle'>Search for Links</h5>
+	<div id = 'search-container'>
+		<input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input>
+		<p id = 'search-results'></p>
+	</div>
+
+	<footer class="footer" style = 'margin-top:15px'>
+      <div class="container">
+            <p class="text-muted">Created by PBL WD Fall 2015</p>
+      </div>
+    </footer>
+
 	</body>
 </html>

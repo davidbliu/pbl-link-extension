@@ -5,6 +5,24 @@ chrome.tabs.getSelected(null,function(tab) {
 });
 
 
+// var root_url = "http://localhost:3000/"
+var root_url = 'http://testing.berkeley-pbl.com/'
+
+$('#toggle-advanced').click(function(){
+	$('#advanced-controls').toggle();
+});
+function activateToggles(){
+	$('#add-toggle').click(function(){
+		$('#add-container').toggle();
+	});
+	$('#create-directory-toggle').click(function(){
+		$('#create-directory-container').toggle();
+	});
+	$('#search-toggle').click(function(){
+		$('#search-container').toggle();
+	});
+}
+
 // Create the XHR object.
 function createCORSRequest(method, url) {
   var xhr = new XMLHttpRequest();
@@ -22,11 +40,54 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
-// var root_url = "http://localhost:3000/"
-var root_url = 'http://testing.berkeley-pbl.com/'
+function activateSearch(){
+	$('#search-input').keypress(function(e) {
+	    if(e.which == 13) {
+	       pullSearchData();
+	    }
+	});
+}
+function pullSearchData(){
+	search_term = $('#search-input').val();
+	$('#message').html('<h3>Searching for '+search_term+'</h3>');
+	params = "search_term="+encodeURIComponent(search_term);
+	url = root_url + 'chrome/search' + '?' + params
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	that = $(this);
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		var results = JSON.parse(text);
+		var resultsDiv = document.createElement('div');
+		for(var i=0 ;i<results.length;i++){
+			var searchResult = document.createElement('div');
+			var searchLink = document.createElement('a');
+			$(searchLink).text("pbl.link/" + results[i].attributes.key);
+			$(searchLink).attr('href', 'http://pbl.link/'+results[i].attributes.key);
+			$(searchLink).attr('title', results[i].attributes.description);
+			$(searchResult).append(searchLink);
+			// console.log(results[i].key);
+			// console.log(results[i]);
+			// console.log(results[i].get('key'));
+			console.log(searchResult)
+			$(resultsDiv).append(searchResult);
+		}
+		console.log(results)
+		$('#search-results').html(resultsDiv);
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: search failed</h3>');
+	};
+	xhr.send();
+}
+
 $("#save").click(function(){
 	$('#message').html('<h3>Saving link...</h3>');
-	$('#message2').html('');
 	key = $('#key-input').val();
 	url = $('#url-input').val();
 	description = $('#description-input').val();
@@ -54,7 +115,6 @@ $("#save").click(function(){
 
 $("#lookup").click(function(){
 	$('#message').html('<h3>Looking up URL...</h3>');
-	$('#message2').html('');
 	url = $('#url-input').val();
 	params = "url="+encodeURIComponent(url);
 	url = root_url + 'chrome/lookup_url' + '?' + params
@@ -63,6 +123,7 @@ $("#lookup").click(function(){
 		$('#message').html('<h3>CORS not supported</h3>');
 		return;
 	}
+	that = $(this);
 	// Response handlers.
 	xhr.onload = function() {
 		var text = xhr.responseText;
@@ -75,24 +136,50 @@ $("#lookup").click(function(){
 	xhr.send();
 });
 
-
+$('#create-directory-btn').click(function(){
+	$('#message').html('<h3>Creating your directory...</h3>');
+	directory = $('#create-directory-input').val();
+	params = "directory="+encodeURIComponent(directory);
+	url = root_url + 'chrome/create_directory' + '?' + params
+	var xhr = createCORSRequest('POST', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		$('#message').html(text);
+		pullDirectoryDropdown();
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: failed to create directory</h3>');
+	};
+	xhr.send();
+});
 //pull directory folder structure container
-url = root_url+'chrome/directories_dropdown'
-var xhr = createCORSRequest('GET', url);
-if (!xhr) {
-	$('#message').html('<h3>CORS not supported</h3>');
-	return;
+function pullDirectoryDropdown(){
+	url = root_url+'chrome/directories_dropdown'
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		$('#directory-input-container').html(text);
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: failed to load directories</h3>');
+	};
+	xhr.send();
 }
-// Response handlers.
-xhr.onload = function() {
-	var text = xhr.responseText;
-	$('#directory-input-container').html(text);
-};
-xhr.onerror = function() {
-	var text = xhr.responseText;
-	$('#message').html('<h3>Error: failed to load directories</h3>');
-};
-xhr.send();
+pullDirectoryDropdown();
+activateToggles();
+activateSearch();
 
 
 
