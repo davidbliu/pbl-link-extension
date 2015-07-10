@@ -22,41 +22,61 @@ function createCORSRequest(method, url) {
   return xhr;
 }
 
+// var root_url = "http://localhost:3000/"
+var root_url = 'http://testing.berkeley-pbl.com/'
 $("#save").click(function(){
-	$('#message').text('Saving link...');
-	$('#message2').text('');
+	$('#message').html('<h3>Saving link...</h3>');
+	$('#message2').html('');
 	key = $('#key-input').val();
 	url = $('#url-input').val();
 	description = $('#description-input').val();
 	directory = $('#directory-input').val();
-	
 	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+"&directory="+encodeURIComponent(directory);
-
-
-	url = 'http://testing.berkeley-pbl.com/go/create' + '?' + params
-  var xhr = createCORSRequest('POST', url);
-  if (!xhr) {
-    $('#message2').text('CORS not supported');
-    return;
-  }
-  // Response handlers.
-  xhr.onload = function() {
-    var text = xhr.responseText;
-    $('#message').text(text);
-    $('#message2').text('Visit link at pbl.link/'+key);
-  };
-
-  xhr.onerror = function() {
-  	var text = xhr.responseText;
-    $('#message').text('Error: unable to save link');
-  };
-
-  xhr.send();
-
-
-
-
-	
+	url = root_url + 'chrome/create_go_link' + '?' + params
+	var xhr = createCORSRequest('POST', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		$('#message').html(text);
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: unable to save link</h3>');
+	};
+	xhr.send();
 });
+
+$("#lookup").click(function(){
+	$('#message').html('<h3>Looking up URL...</h3>');
+	$('#message2').html('');
+	url = $('#url-input').val();
+	params = "url="+encodeURIComponent(url);
+	url = root_url + 'chrome/lookup_url' + '?' + params
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		$('#message').html(text);
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#message').text('<h3>Error: lookup failed</h3>');
+	};
+	xhr.send();
+});
+
+
+
+
+
+
 
 });
