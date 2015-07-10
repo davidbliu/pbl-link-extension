@@ -1,24 +1,37 @@
 <!doctype html>
 <html>
-  <head>
-    <title>PBL Link Add</title>
-    <link rel = 'stylesheet' type = 'text/css' href 'bootstrap.css'>
-    <script src="jquery.js"></script>
-    <script src="add_link.js"></script>
-  </head>
-  <body style = 'padding:5px'>
-  	<img src = 'pbl-logo-circle.png' height=35></img>
-    <h1 style = 'width:200px'>Add New PBL Link</h1>
+	<head>
+	    <meta charset="utf-8">
+		<meta name="description" content="A Fast Adder for Creating PBL Links">
+		<meta name="author" content="David Liu">
+		
+		<title>PBL Links Adder</title>
+		
+		<!-- Scripts -->
+		<script src="js/jquery-2.0.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src = 'js/popup.js'></script>
+		<!-- Cascading Style Sheets -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/custom.css" rel="stylesheet" media="screen">		
+	</head>
+	
+	<body>
+	
+
+	<img src = 'pbl-logo-circle.png' height=35></img>
+    <h1>Add PBL Links</h1>
     <div id = 'message'></div>
     <div id = 'message2'></div>
 
-    <input style = 'width:200px; clear:both; margin-bottom:5px' class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url' readonly='readonly'></input>
-    <input style = 'width:200px; clear:both; margin-bottom:5px' id = 'key-input' type = 'text' placeholder = 'key'></input>
-    <input style = 'width:200px; clear:both; margin-bottom:5px' id = 'description-input' type = 'text' placeholder = 'description'></input>
-    <input style = 'width:200px; clear:both; margin-bottom:5px' id = 'directory-input' type = 'text' placeholder = 'directory'></input>
-    <div style = 'clear:both;position:inline-block;margin-bottom:15px'>
-    	<div style = 'float:left'><button id = "save">Add New Link</button></div>
-   		<div style = 'float:right'><button class = "pull-right" id = "lookup">Lookup URL</button></div>
+    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
+    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
+    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description'></input>
+    <div id = 'directory-input-container'></div>
+    <div class = 'btn-container'>
+    	<button class = 'btn btn-primary pull-left' id = "save">Add New Link</button>
+   		<button class = "btn btn-default pull-right" id = "lookup">Lookup URL</button>
    	</div>
-</body>
+		
+	</body>
 </html>

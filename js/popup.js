@@ -30,7 +30,9 @@ $("#save").click(function(){
 	key = $('#key-input').val();
 	url = $('#url-input').val();
 	description = $('#description-input').val();
-	directory = $('#directory-input').val();
+	// directory = $('#directory-input').val();
+	directory = $('#directories-dropdown').find(":selected").attr('id');
+
 	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+"&directory="+encodeURIComponent(directory);
 	url = root_url + 'chrome/create_go_link' + '?' + params
 	var xhr = createCORSRequest('POST', url);
@@ -68,13 +70,29 @@ $("#lookup").click(function(){
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
-		$('#message').text('<h3>Error: lookup failed</h3>');
+		$('#message').html('<h3>Error: lookup failed</h3>');
 	};
 	xhr.send();
 });
 
 
-
+//pull directory folder structure container
+url = root_url+'chrome/directories_dropdown'
+var xhr = createCORSRequest('GET', url);
+if (!xhr) {
+	$('#message').html('<h3>CORS not supported</h3>');
+	return;
+}
+// Response handlers.
+xhr.onload = function() {
+	var text = xhr.responseText;
+	$('#directory-input-container').html(text);
+};
+xhr.onerror = function() {
+	var text = xhr.responseText;
+	$('#message').html('<h3>Error: failed to load directories</h3>');
+};
+xhr.send();
 
 
 

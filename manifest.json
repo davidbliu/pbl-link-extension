@@ -1,16 +1,27 @@
 {
-  "manifest_version": 2,
-  "permissions": ["http://localhost/","http://testing.berkeley-pbl.com/", "https://testing.berkeley-pbl.com/go*", "http://testing.berkeley-pbl.com/go*", "http://www.stackoverflow.com/search*"],
-  "name": "PBL Link Adder",
-  "description": "This extension will analyze a page using GTmetrix",
-  "version": "1.0",
- 
-  "browser_action": {
-   "default_icon": "pbl-logo-circle.png",
-   "default_popup": "popup.html"
-  },
-  "permissions": [
-   "activeTab",
-   "tabs"
-   ]
+	"manifest_version": 2,
+	"name": "PBL Link Adder",
+	"description": "A fast adder tool for PBL Links",
+	"version": "1.0",
+	"permissions": [
+		"storage",
+		"activeTab",
+		"tabs"
+	],
+	"icons": { 
+		"16": "pbl-logo-circle.png",
+		"48": "pbl-logo-circle.png",
+		"128": "pbl-logo-circle.png" 
+	},
+	"browser_action": {
+		"default_icon": {                    
+			"19": "pbl-logo-circle.png",          
+			"38": "pbl-logo-circle.png"          
+		},
+		"default_popup": "popup.html"
+	},
+	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+	"web_accessible_resources": [
+		"img/icon128.png"
+	]
 }
