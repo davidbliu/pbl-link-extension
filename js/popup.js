@@ -1,16 +1,9 @@
-$(document).ready(function(){
-//get current tab url
-chrome.tabs.getSelected(null,function(tab) {
-    	$('#url-input').val(tab.url);
-});
+
 
 
 // var root_url = "http://localhost:3000/"
 var root_url = 'http://testing.berkeley-pbl.com/'
 
-$('#toggle-advanced').click(function(){
-	$('#advanced-controls').toggle();
-});
 function activateToggles(){
 	$('#add-toggle').click(function(){
 		$('#add-container').toggle();
@@ -85,7 +78,7 @@ function pullSearchData(){
 	};
 	xhr.send();
 }
-
+function activateSaveButton(){
 $("#save").click(function(){
 	$('#message').html('<h3>Saving link...</h3>');
 	key = $('#key-input').val();
@@ -112,8 +105,9 @@ $("#save").click(function(){
 	};
 	xhr.send();
 });
+}
 
-$("#lookup").click(function(){
+function lookupURL(){
 	$('#message').html('<h3>Looking up URL...</h3>');
 	url = $('#url-input').val();
 	params = "url="+encodeURIComponent(url);
@@ -131,11 +125,11 @@ $("#lookup").click(function(){
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
-		$('#message').html('<h3>Error: lookup failed</h3>');
+		$('#message').html('<h3>Failed to lookup URL</h3>');
 	};
 	xhr.send();
-});
-
+}
+function activateCreateDirectoryButton(){
 $('#create-directory-btn').click(function(){
 	$('#message').html('<h3>Creating your directory...</h3>');
 	directory = $('#create-directory-input').val();
@@ -158,6 +152,7 @@ $('#create-directory-btn').click(function(){
 	};
 	xhr.send();
 });
+}
 //pull directory folder structure container
 function pullDirectoryDropdown(){
 	url = root_url+'chrome/directories_dropdown'
@@ -177,9 +172,19 @@ function pullDirectoryDropdown(){
 	};
 	xhr.send();
 }
+
+$(document).ready(function(){
+//get current tab url
+chrome.tabs.getSelected(null,function(tab) {
+    	$('#url-input').val(tab.url);
+    	lookupURL();
+});
+
 pullDirectoryDropdown();
 activateToggles();
 activateSearch();
+activateSaveButton();
+activateCreateDirectoryButton();
 
 
 
