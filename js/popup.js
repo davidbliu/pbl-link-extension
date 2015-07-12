@@ -61,6 +61,7 @@ function pullSearchData(){
 			var searchLink = document.createElement('a');
 			$(searchLink).text("pbl.link/" + results[i].attributes.key);
 			$(searchLink).attr('href', 'http://pbl.link/'+results[i].attributes.key);
+			$(searchLink).attr('target', '_blank');
 			$(searchLink).attr('title', results[i].attributes.description);
 			$(searchResult).append(searchLink);
 			// console.log(results[i].key);
