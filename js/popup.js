@@ -99,6 +99,7 @@ $("#save").click(function(){
 	xhr.onload = function() {
 		var text = xhr.responseText;
 		$('#message').html(text);
+		activateUndoButton();
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
@@ -107,7 +108,30 @@ $("#save").click(function(){
 	xhr.send();
 });
 }
-
+function activateUndoButton(){
+	$('#undo-btn').click(function(){
+		console.log('undo button has been clicked');
+		$('#message').html('<h3>Undoing...</h3>');
+		key = $('#key-input').val();
+		params = "key="+key;
+		url = root_url + 'chrome/undo_create_go_link' + '?' + params
+		var xhr = createCORSRequest('POST', url);
+		if (!xhr) {
+			$('#message').html('<h3>CORS not supported</h3>');
+			return;
+		}
+		// Response handlers.
+		xhr.onload = function() {
+			var text = xhr.responseText;
+			$('#message').html(text);
+		};
+		xhr.onerror = function() {
+			var text = xhr.responseText;
+			$('#message').html('<h3>Error: unable to undo create action</h3>');
+		};
+		xhr.send();
+	});
+}
 function lookupURL(){
 	$('#message').html('<h3>Looking up URL...</h3>');
 	url = $('#url-input').val();
@@ -186,8 +210,7 @@ activateToggles();
 activateSearch();
 activateSaveButton();
 activateCreateDirectoryButton();
-
-
+activateUndoButton();
 
 
 });
