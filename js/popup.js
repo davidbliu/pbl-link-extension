@@ -78,7 +78,7 @@ function pullSearchData(){
 	};
 	xhr.send();
 }
-function activateSaveButton(){
+function activateSaveButton(email){
 $("#save").click(function(){
 	$('#message').html('<h3>Saving link...</h3>');
 	key = $('#key-input').val();
@@ -87,7 +87,7 @@ $("#save").click(function(){
 	// directory = $('#directory-input').val();
 	directory = $('#directories-dropdown').find(":selected").attr('id');
 
-	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+"&directory="+encodeURIComponent(directory);
+	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+"&directory="+encodeURIComponent(directory)+'&email='+email;
 	url = root_url + 'chrome/create_go_link' + '?' + params
 	var xhr = createCORSRequest('POST', url);
 	if (!xhr) {
@@ -222,17 +222,19 @@ chrome.tabs.getSelected(null,function(tab) {
     	$('#url-input').val(tab.url);
     	lookupURL();
 });
+var email = '';
 chrome.identity.getProfileUserInfo(function(userInfo) {
  /* Use userInfo.email, or better (for privacy) userInfo.id
     They will be empty if user is not signed in in Chrome */
-    var email = userInfo.email;
+    email = userInfo.email;
     pullFavoriteLinks(email);
+    activateSaveButton(email);
     //pull favorite links
 });
 pullDirectoryDropdown();
 activateToggles();
 activateSearch();
-activateSaveButton();
+
 activateCreateDirectoryButton();
 activateUndoButton();
 
