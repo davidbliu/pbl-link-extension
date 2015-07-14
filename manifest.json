@@ -6,7 +6,9 @@
 	"permissions": [
 		"storage",
 		"activeTab",
-		"tabs"
+		"tabs",
+		"identity",
+		"identity.email"
 	],
 	"icons": { 
 		"16": "pbl-logo-circle.png",

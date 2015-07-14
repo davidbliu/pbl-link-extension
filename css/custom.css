@@ -34,6 +34,9 @@ section { padding: 5px;}
 #add-toggle:hover{
 	cursor:pointer;
 }
+#favorite-toggle:hover{
+	cursor:pointer;
+}
 #create-directory-toggle:hover{
 	cursor:pointer;
 }

@@ -14,6 +14,9 @@ function activateToggles(){
 	$('#search-toggle').click(function(){
 		$('#search-container').toggle();
 	});
+	$('#favorite-toggle').click(function(){
+		$('#favorite-links-container').toggle();
+	});
 }
 
 // Create the XHR object.
@@ -64,10 +67,6 @@ function pullSearchData(){
 			$(searchLink).attr('target', '_blank');
 			$(searchLink).attr('title', results[i].attributes.description);
 			$(searchResult).append(searchLink);
-			// console.log(results[i].key);
-			// console.log(results[i]);
-			// console.log(results[i].get('key'));
-			console.log(searchResult)
 			$(resultsDiv).append(searchResult);
 		}
 		console.log(results)
@@ -197,6 +196,25 @@ function pullDirectoryDropdown(){
 	};
 	xhr.send();
 }
+function pullFavoriteLinks(email){
+	url = root_url+'chrome/favorite_links'
+	url += "?email="+email
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	// Response handlers.
+	xhr.onload = function() {
+		var text = xhr.responseText;
+		$('#favorite-links-container').html(text);
+	};
+	xhr.onerror = function() {
+		var text = xhr.responseText;
+		$('#favorite-links-container').html('<p>Error: unable to retrieve favorite links</p>');
+	};
+	xhr.send();
+}
 
 $(document).ready(function(){
 //get current tab url
@@ -204,7 +222,13 @@ chrome.tabs.getSelected(null,function(tab) {
     	$('#url-input').val(tab.url);
     	lookupURL();
 });
-
+chrome.identity.getProfileUserInfo(function(userInfo) {
+ /* Use userInfo.email, or better (for privacy) userInfo.id
+    They will be empty if user is not signed in in Chrome */
+    var email = userInfo.email;
+    pullFavoriteLinks(email);
+    //pull favorite links
+});
 pullDirectoryDropdown();
 activateToggles();
 activateSearch();
