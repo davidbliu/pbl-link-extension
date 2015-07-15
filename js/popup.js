@@ -6,16 +6,16 @@ var root_url = 'http://testing.berkeley-pbl.com/'
 
 function activateToggles(){
 	$('#add-toggle').click(function(){
-		$('#add-container').toggle();
+		$('#add-container').slideToggle("fast");
 	});
 	$('#create-directory-toggle').click(function(){
-		$('#create-directory-container').toggle();
+		$('#create-directory-container').slideToggle("fast");
 	});
 	$('#search-toggle').click(function(){
-		$('#search-container').toggle();
+		$('#search-container').slideToggle("fast");
 	});
 	$('#favorite-toggle').click(function(){
-		$('#favorite-links-container').toggle();
+		$('#favorite-links-container').slideToggle("fast");
 	});
 }
 
