@@ -1,8 +1,39 @@
-
-
-
 // var root_url = "http://localhost:3000/"
 var root_url = 'http://testing.berkeley-pbl.com/'
+var tab_title = ''
+// $(document).ready(function(){
+//get current tab url
+chrome.tabs.getSelected(null,function(tab) {
+    	$('#url-input').val(tab.url);
+    	lookupURL();
+    	tab_title = tab.title;
+    	//add title to the form
+    	tab_title = tab_title.toLowerCase().replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?]/g,"").replace(/ /g,'-').split('--')[0];
+    	$('#key-input').val(tab_title);
+});
+
+var email = '';
+chrome.identity.getProfileUserInfo(function(userInfo) {
+ /* Use userInfo.email, or better (for privacy) userInfo.id
+    They will be empty if user is not signed in in Chrome */
+    email = userInfo.email;
+    $('#chrome-email-span').text(email);
+    pullFavoriteLinks(email);
+    activateSaveButton(email);
+    //pull favorite links
+});
+pullDirectoryDropdown();
+activateToggles();
+activateSearch();
+
+activateCreateDirectoryButton();
+activateUndoButton();
+
+
+// });
+
+
+
 
 function activateToggles(){
 	$('#add-toggle').click(function(){
@@ -35,7 +66,12 @@ function createCORSRequest(method, url) {
   }
   return xhr;
 }
-
+function showSpinner(){
+	$('#loading-spinner').show();
+}
+function hideSpinner(){
+	$('#loading-spinner').hide();
+}
 function activateSearch(){
 	$('#search-input').keypress(function(e) {
 	    if(e.which == 13) {
@@ -45,7 +81,7 @@ function activateSearch(){
 }
 function pullSearchData(){
 	search_term = $('#search-input').val();
-	params = "search_term="+encodeURIComponent(search_term);
+	params = "search_term="+encodeURIComponent(search_term)+"&email="+email;
 	url = root_url + 'chrome/search' + '?' + params
 	var xhr = createCORSRequest('GET', url);
 	if (!xhr) {
@@ -53,8 +89,10 @@ function pullSearchData(){
 		return;
 	}
 	that = $(this);
+	showSpinner();
 	// Response handlers.
 	xhr.onload = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		var results = JSON.parse(text);
 		var resultsDiv = document.createElement('div');
@@ -73,6 +111,7 @@ function pullSearchData(){
 		$('#search-results').prepend('<p>Displaying results for '+search_term+'</p>');
 	};
 	xhr.onerror = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html('<h3>Error: search failed</h3>');
 	};
@@ -94,13 +133,16 @@ $("#save").click(function(){
 		$('#message').html('<h3>CORS not supported</h3>');
 		return;
 	}
+	showSpinner();
 	// Response handlers.
 	xhr.onload = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html(text);
 		activateUndoButton();
 	};
 	xhr.onerror = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html('<h3>Error: unable to save link</h3>');
 	};
@@ -119,12 +161,15 @@ function activateUndoButton(){
 			$('#message').html('<h3>CORS not supported</h3>');
 			return;
 		}
+		showSpinner();
 		// Response handlers.
 		xhr.onload = function() {
+			hideSpinner();
 			var text = xhr.responseText;
 			$('#message').html(text);
 		};
 		xhr.onerror = function() {
+			hideSpinner();
 			var text = xhr.responseText;
 			$('#message').html('<h3>Error: unable to undo create action</h3>');
 		};
@@ -142,12 +187,15 @@ function lookupURL(){
 		return;
 	}
 	that = $(this);
+	showSpinner();
 	// Response handlers.
 	xhr.onload = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html(text);
 	};
 	xhr.onerror = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html('<h4>Failed to lookup URL</h4>');
 	};
@@ -164,13 +212,16 @@ $('#create-directory-btn').click(function(){
 		$('#message').html('<h3>CORS not supported</h3>');
 		return;
 	}
+	showSpinner();
 	// Response handlers.
 	xhr.onload = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html(text);
 		pullDirectoryDropdown();
 	};
 	xhr.onerror = function() {
+		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html('<h3>Error: failed to create directory</h3>');
 	};
@@ -216,28 +267,4 @@ function pullFavoriteLinks(email){
 	xhr.send();
 }
 
-$(document).ready(function(){
-//get current tab url
-chrome.tabs.getSelected(null,function(tab) {
-    	$('#url-input').val(tab.url);
-    	lookupURL();
-});
-var email = '';
-chrome.identity.getProfileUserInfo(function(userInfo) {
- /* Use userInfo.email, or better (for privacy) userInfo.id
-    They will be empty if user is not signed in in Chrome */
-    email = userInfo.email;
-    $('#chrome-email-span').text(email);
-    pullFavoriteLinks(email);
-    activateSaveButton(email);
-    //pull favorite links
-});
-pullDirectoryDropdown();
-activateToggles();
-activateSearch();
 
-activateCreateDirectoryButton();
-activateUndoButton();
-
-
-});
