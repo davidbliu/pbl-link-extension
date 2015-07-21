@@ -23,42 +23,47 @@
     <h1>PBL Links</h1>
     <div id = 'message'></div>
     <div id = 'message2'></div>
-    <h5 id = 'add-toggle'><span class = 'glyphicon glyphicon-plus'></span> Add a PBL Link</h5>
-    <div id = 'add-container'>
+    <h5 id = 'add-toggle'>Add a PBL Link</h5>
+    <div id = 'add-container' class = 'main-container well'>
+    	<p class = 'smalltext text-muted'>Please refer to the PBL Links guide for naming conventions. Keys should be alphanumeric-hyphen-separated-words. If the namespace you want is common, consider attaching your committee and appending the semester (ex: ht-drive-fa14). We recommend using lowercase because PBL Links is case sensitive.</p>
 	    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
 	    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
 	    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description'></input>
 	    <div id = 'directory-input-container'></div>
 	    <div class = 'btn-container'>
 	    	<button class = 'btn btn-primary' id = "save">Add New Link</button>
-	   		<!-- <button class = "btn btn-default pull-right" id = "lookup">Lookup URL</button> -->
-	   	</div>
+		</div>
 
-	   	<h5 id = 'create-directory-toggle'><span class = 'glyphicon glyphicon-folder-open'></span> Create New Directory</h5>
-	<div id = 'create-directory-container'>
-			
-		<input class = 'form-control' id = 'create-directory-input' type = 'text' placeholder = 'Example: /historian/fall-2014'></input>
-		<button class = 'btn btn-primary' id = "create-directory-btn"> Create Directory</button>
+		<p class = 'smalltext text-muted'>If you can't find the right directory for your PBL Link consider creating a new directory.</p>
 
-	</div>
+		<h5 id = 'create-directory-toggle'>Create New Directory</h5>
+		<div id = 'create-directory-container'>
+			<p class = 'smalltext text-muted'>Directories can only be three levels deep and should follow the same naming conventions as Links (alphanumeric-hyphen-separated-words)</p>
+			<input class = 'form-control' id = 'create-directory-input' type = 'text' placeholder = 'Example: /historian/fall-2014'></input>
+			<button class = 'btn btn-primary' id = "create-directory-btn"> Create Directory</button>
+
+		</div>
     </div>
 	
-	<h5 id = 'search-toggle'><span class = 'glyphicon glyphicon-search'></span> Search for Links</h5>
-	<div id = 'search-container'>
+	<h5 id = 'search-toggle'>Search for Links</h5>
+	<div id = 'search-container' class = 'main-container'>
+		<p class = 'smalltext text-muted'>Note: Freshly added PBL Links may not be exposed to fulltext search immediately(but you can still search by Key and Description). Please allow at least 1 day for our search engine to index your PBL Link for fulltext search!</p>
 		<input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input>
 		<p id = 'search-results'></p>
 		
 	</div>
 
-	<h5 id = 'favorite-toggle'><span class = 'glyphicon glyphicon-heart'></span> Favorite Links</h5>
-	<div id = 'favorite-links-message'></div>
-	<div id = 'favorite-links-container'></div>
+	<h5 id = 'favorite-toggle'>Favorite Links</h5>
+	
+	<div id = 'favorite-links-container' class = 'main-container'>
+		<div id = 'favorite-links-message'><p class = 'smalltext text-muted'>Note: your favorite links are being pulled using your chrome account email: <b id = 'chrome-email-span'>{{email}}</b>. If this does not match your Portal email, add your chrome email to the Portal to sync up favorite links! (visit <a href = 'http://pbl.link/chrome-sync' target = '_blank'>pbl.link/chrome-sync</a> for steps)</p></div>
+	</div>
 
-	<footer class="footer" style = 'margin-top:15px'>
+	<footer class="footer" style = 'margin-top:15px; border-top:1px solid rgba(0,0,0,0.1);'>
       <div class="container">
 
-            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.1</div></p>
-            <a href = 'http://pbl.link' target = '_blank'>See Full Link Catalogue at PBL.Link</a>
+            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.3</div></p>
+            <a href = 'http://pbl.link' target = '_blank'>See Full PBL Link Catalogue at pbl.Link</a>
       </div>
     </footer>
 

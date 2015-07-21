@@ -45,7 +45,6 @@ function activateSearch(){
 }
 function pullSearchData(){
 	search_term = $('#search-input').val();
-	$('#message').html('<h3>Searching for '+search_term+'</h3>');
 	params = "search_term="+encodeURIComponent(search_term);
 	url = root_url + 'chrome/search' + '?' + params
 	var xhr = createCORSRequest('GET', url);
@@ -71,6 +70,7 @@ function pullSearchData(){
 		}
 		console.log(results)
 		$('#search-results').html(resultsDiv);
+		$('#search-results').prepend('<p>Displaying results for '+search_term+'</p>');
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
@@ -132,7 +132,7 @@ function activateUndoButton(){
 	});
 }
 function lookupURL(){
-	$('#message').html('<h3>Looking up URL...</h3>');
+	$('#message').html('<h4>Looking up URL...</h4>');
 	url = $('#url-input').val();
 	params = "url="+encodeURIComponent(url);
 	url = root_url + 'chrome/lookup_url' + '?' + params
@@ -149,7 +149,7 @@ function lookupURL(){
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
-		$('#message').html('<h3>Failed to lookup URL</h3>');
+		$('#message').html('<h4>Failed to lookup URL</h4>');
 	};
 	xhr.send();
 }
@@ -207,7 +207,7 @@ function pullFavoriteLinks(email){
 	// Response handlers.
 	xhr.onload = function() {
 		var text = xhr.responseText;
-		$('#favorite-links-container').html(text);
+		$('#favorite-links-container').append(text);
 	};
 	xhr.onerror = function() {
 		var text = xhr.responseText;
@@ -227,6 +227,7 @@ chrome.identity.getProfileUserInfo(function(userInfo) {
  /* Use userInfo.email, or better (for privacy) userInfo.id
     They will be empty if user is not signed in in Chrome */
     email = userInfo.email;
+    $('#chrome-email-span').text(email);
     pullFavoriteLinks(email);
     activateSaveButton(email);
     //pull favorite links

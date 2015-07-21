@@ -20,7 +20,7 @@ input[type='text']{
 }
 .btn-container{
 	margin-top:10px;
-
+	margin-bottom:10px;
 }
 /* Basic style tweaks */
 section { padding: 5px;}
@@ -54,4 +54,15 @@ section { padding: 5px;}
 }
 #favorite-links-container{
 	display:none;
+}
+
+.main-container{
+	border:1px solid rgba(0,0,0,0.1);
+	border-radius:3px;
+	background-color:rgba(100,100,100,0.1);
+	padding:10px;
+
+}
+.smalltext{
+	font-size:10px;
 }
