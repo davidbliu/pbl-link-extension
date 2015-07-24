@@ -8,7 +8,8 @@ chrome.tabs.getSelected(null,function(tab) {
     	lookupURL();
     	tab_title = tab.title;
     	//add title to the form
-    	tab_title = tab_title.toLowerCase().replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?]/g,"").replace(/ /g,'-').split('--')[0];
+    	tab_title = tab_title.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-').split('--')[0];//replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?\''\""\|]/g,"")
+
     	$('#key-input').val(tab_title);
 });
 
