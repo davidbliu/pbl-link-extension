@@ -66,3 +66,7 @@ section { padding: 5px;}
 .smalltext{
 	font-size:10px;
 }
+.lookup-match:hover{
+	cursor:pointer;
+}
+

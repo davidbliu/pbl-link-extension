@@ -32,9 +32,24 @@ activateUndoButton();
 
 
 // });
-
-
-
+function copyToClipboard( text ){
+    var copyDiv = document.createElement('div');
+    copyDiv.contentEditable = true;
+    document.body.appendChild(copyDiv);
+    copyDiv.innerHTML = text;
+    copyDiv.unselectable = "off";
+    copyDiv.focus();
+    document.execCommand('SelectAll');
+    document.execCommand("Copy", false, null);
+    document.body.removeChild(copyDiv);
+}
+function activateCopyLinkToClipboard(){
+	$('.lookup-match').click(function(){
+		$(this).fadeIn(100).fadeOut(100).fadeIn(100);
+		copyToClipboard($(this).text());
+	})
+}
+activateCopyLinkToClipboard();
 
 function activateToggles(){
 	$('#add-toggle').click(function(){
@@ -194,6 +209,7 @@ function lookupURL(){
 		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html(text);
+		activateCopyLinkToClipboard();
 	};
 	xhr.onerror = function() {
 		hideSpinner();
