@@ -58,18 +58,21 @@ function removeLabelActions(){
 
 function copyToClipboard( text ){
     var copyDiv = document.createElement('div');
+
     copyDiv.contentEditable = true;
-    document.body.appendChild(copyDiv);
+    // document.body.appendChild(copyDiv);
+    $(copyDiv).insertBefore($('#message'));
     copyDiv.innerHTML = text;
     copyDiv.unselectable = "off";
     copyDiv.focus();
     document.execCommand('SelectAll');
     document.execCommand("Copy", false, null);
-    document.body.removeChild(copyDiv);
+    // document.body.removeChild(copyDiv);
+    $(copyDiv).remove();
 }
 function activateCopyLinkToClipboard(){
 	$('.lookup-match').click(function(){
-		$(this).fadeIn(100).fadeOut(100).fadeIn(100);
+		$(this).fadeOut(100).fadeIn(100);
 		copyToClipboard($(this).text());
 	})
 }
@@ -155,7 +158,9 @@ $("#save").click(function(){
 		hideSpinner();
 		var text = xhr.responseText;
 		$('#message').html(text);
+		activateCopyLinkToClipboard();
 		activateUndoButton();
+		
 	};
 	xhr.onerror = function() {
 		hideSpinner();
