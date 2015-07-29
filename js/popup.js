@@ -1,37 +1,61 @@
-// var root_url = "http://localhost:3000/"
-var root_url = 'http://testing.berkeley-pbl.com/'
-var tab_title = ''
-// $(document).ready(function(){
-//get current tab url
-chrome.tabs.getSelected(null,function(tab) {
-    	$('#url-input').val(tab.url);
-    	lookupURL();
-    	tab_title = tab.title;
-    	//add title to the form
-    	tab_title = tab_title.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-').split('--')[0];//replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?\''\""\|]/g,"")
 
-    	$('#key-input').val(tab_title);
-});
+// Create the XHR object.
+function createCORSRequest(method, url) {
+  var xhr = new XMLHttpRequest();
+  if ("withCredentials" in xhr) {
+    // XHR for Chrome/Firefox/Opera/Safari.
+    xhr.open(method, url, true);
+  } else if (typeof XDomainRequest != "undefined") {
+    // XDomainRequest for IE.
+    xhr = new XDomainRequest();
+    xhr.open(method, url);
+  } else {
+    // CORS not supported.
+    xhr = null;
+  }
+  return xhr;
+}
+function showSpinner(){
+	$('#loading-spinner').show();
+}
+function hideSpinner(){
+	$('#loading-spinner').hide();
+}
+function activateSearch(){
+	$('#search-input').keypress(function(e) {
+	    if(e.which == 13) {
+	       pullSearchData();
+	    }
+	});
+}
 
-var email = '';
-chrome.identity.getProfileUserInfo(function(userInfo) {
- /* Use userInfo.email, or better (for privacy) userInfo.id
-    They will be empty if user is not signed in in Chrome */
-    email = userInfo.email;
-    $('#chrome-email-span').text(email);
-    pullFavoriteLinks(email);
-    activateSaveButton(email);
-    //pull favorite links
-});
-pullDirectoryDropdown();
-activateToggles();
-activateSearch();
+function stripText(text){
+	return text.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-');
+}
+function labelAddActions(){
+	$('#tags-input').keypress(function(e) {
+	    if(e.which == 13) {
+	       tag = $('#tags-input').val();
+	       tag = stripText(tag);
+	       $(this).val("");
+	       htmlTag = document.createElement('div');
+	       $(htmlTag).addClass('label');
+	       $(htmlTag).addClass('label-default');
+	       $(htmlTag).addClass('tag-label');
+	       $(htmlTag).text(tag);
+	       $(htmlTag).append('&nbsp;<a class = "label-remove-link" href = "javascript:void(0);">x</a>');
+	       $('#tags-container').append(htmlTag);
+	       removeLabelActions();
+	    }
+	});
+}
+function removeLabelActions(){
+	$('.label-remove-link').click(function(){
+		$(this).parent().remove();
+	});
+}
 
-activateCreateDirectoryButton();
-activateUndoButton();
 
-
-// });
 function copyToClipboard( text ){
     var copyDiv = document.createElement('div');
     copyDiv.contentEditable = true;
@@ -66,35 +90,7 @@ function activateToggles(){
 	});
 }
 
-// Create the XHR object.
-function createCORSRequest(method, url) {
-  var xhr = new XMLHttpRequest();
-  if ("withCredentials" in xhr) {
-    // XHR for Chrome/Firefox/Opera/Safari.
-    xhr.open(method, url, true);
-  } else if (typeof XDomainRequest != "undefined") {
-    // XDomainRequest for IE.
-    xhr = new XDomainRequest();
-    xhr.open(method, url);
-  } else {
-    // CORS not supported.
-    xhr = null;
-  }
-  return xhr;
-}
-function showSpinner(){
-	$('#loading-spinner').show();
-}
-function hideSpinner(){
-	$('#loading-spinner').hide();
-}
-function activateSearch(){
-	$('#search-input').keypress(function(e) {
-	    if(e.which == 13) {
-	       pullSearchData();
-	    }
-	});
-}
+
 function pullSearchData(){
 	search_term = $('#search-input').val();
 	params = "search_term="+encodeURIComponent(search_term)+"&email="+email;
@@ -139,10 +135,14 @@ $("#save").click(function(){
 	key = $('#key-input').val();
 	url = $('#url-input').val();
 	description = $('#description-input').val();
-	// directory = $('#directory-input').val();
+	tags = [];
+	$('.tag-label').each(function(){
+		tags.push($(this).text().substring(0, $(this).text().length-2));
+	});
+	directory = $('#directory-input').val();
 	directory = $('#directories-dropdown').find(":selected").attr('id');
 
-	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+"&directory="+encodeURIComponent(directory)+'&email='+email;
+	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+'&tags='+encodeURIComponent(tags.join(','))+'&email='+email;
 	url = root_url + 'chrome/create_go_link' + '?' + params
 	var xhr = createCORSRequest('POST', url);
 	if (!xhr) {
@@ -218,52 +218,7 @@ function lookupURL(){
 	};
 	xhr.send();
 }
-function activateCreateDirectoryButton(){
-$('#create-directory-btn').click(function(){
-	$('#message').html('<h3>Creating your directory...</h3>');
-	directory = $('#create-directory-input').val();
-	params = "directory="+encodeURIComponent(directory);
-	url = root_url + 'chrome/create_directory' + '?' + params
-	var xhr = createCORSRequest('POST', url);
-	if (!xhr) {
-		$('#message').html('<h3>CORS not supported</h3>');
-		return;
-	}
-	showSpinner();
-	// Response handlers.
-	xhr.onload = function() {
-		hideSpinner();
-		var text = xhr.responseText;
-		$('#message').html(text);
-		pullDirectoryDropdown();
-	};
-	xhr.onerror = function() {
-		hideSpinner();
-		var text = xhr.responseText;
-		$('#message').html('<h3>Error: failed to create directory</h3>');
-	};
-	xhr.send();
-});
-}
-//pull directory folder structure container
-function pullDirectoryDropdown(){
-	url = root_url+'chrome/directories_dropdown'
-	var xhr = createCORSRequest('GET', url);
-	if (!xhr) {
-		$('#message').html('<h3>CORS not supported</h3>');
-		return;
-	}
-	// Response handlers.
-	xhr.onload = function() {
-		var text = xhr.responseText;
-		$('#directory-input-container').html(text);
-	};
-	xhr.onerror = function() {
-		var text = xhr.responseText;
-		$('#message').html('<h3>Error: failed to load directories</h3>');
-	};
-	xhr.send();
-}
+
 function pullFavoriteLinks(email){
 	url = root_url+'chrome/favorite_links'
 	url += "?email="+email
@@ -283,5 +238,33 @@ function pullFavoriteLinks(email){
 	};
 	xhr.send();
 }
+
+// var root_url = "http://localhost:3000/"
+var root_url = 'http://testing.berkeley-pbl.com/'
+var tab_title = ''
+//get current tab url
+chrome.tabs.getSelected(null,function(tab) {
+    	$('#url-input').val(tab.url);
+    	lookupURL();
+    	tab_title = tab.title;
+    	//add title to the form
+    	tab_title = tab_title.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-').split('--')[0];//replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?\''\""\|]/g,"")
+
+    	$('#key-input').val(tab_title);
+});
+
+var email = '';
+chrome.identity.getProfileUserInfo(function(userInfo) {
+ /* Use userInfo.email, or better (for privacy) userInfo.id
+    They will be empty if user is not signed in in Chrome */
+    email = userInfo.email;
+    $('#chrome-email-span').text(email);
+    pullFavoriteLinks(email);
+    activateSaveButton(email);
+    //pull favorite links
+});
+activateToggles();
+activateSearch();
+labelAddActions();
 
 

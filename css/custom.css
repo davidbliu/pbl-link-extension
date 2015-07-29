@@ -69,4 +69,8 @@ section { padding: 5px;}
 .lookup-match:hover{
 	cursor:pointer;
 }
+#tags-container{
+	padding:5px;
+	margin-top:10px;
+}
 
