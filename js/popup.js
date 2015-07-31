@@ -15,6 +15,34 @@ function createCORSRequest(method, url) {
   }
   return xhr;
 }
+
+// BUNDLES
+function activateBundles(){
+	$('#bundles-link').click(function(){
+		$('#message').html('<h1>trying to set tabs</h1>');
+		chrome.tabs.create({
+			url:'http://pbl.link'
+		});
+		chrome.tabs.create({
+			url:'http://youtube.com'
+		});
+		chrome.tabs.create({
+			url:'http://messenger.com'
+		});
+		chrome.tabs.create({
+			url:'http://pbl.link/wd-drive'
+		});
+		chrome.tabs.create({
+			url:'http://pbl.link/links-trello'
+		});
+		chrome.tabs.create({
+			url:'http://pbl.link/mission'
+		});
+	});
+}
+activateBundles();
+
+
 function showSpinner(){
 	$('#loading-spinner').show();
 }
@@ -36,7 +64,7 @@ function labelAddActions(){
 	$('#tags-input').keypress(function(e) {
 	    if(e.which == 13) {
 	       tag = $('#tags-input').val();
-	       tag = stripText(tag);
+	       // tag = stripText(tag);
 	       $(this).val("");
 	       htmlTag = document.createElement('div');
 	       $(htmlTag).addClass('label');
@@ -44,7 +72,7 @@ function labelAddActions(){
 	       $(htmlTag).addClass('tag-label');
 	       $(htmlTag).text(tag);
 	       $(htmlTag).append('&nbsp;<a class = "label-remove-link" href = "javascript:void(0);">x</a>');
-	       $('#tags-container').append(htmlTag);
+	       $('#tags-container').prepend(htmlTag);
 	       removeLabelActions();
 	    }
 	});
