@@ -17,31 +17,67 @@ function createCORSRequest(method, url) {
 }
 
 // BUNDLES
-function activateBundles(){
-	$('#bundles-link').click(function(){
-		$('#message').html('<h1>trying to set tabs</h1>');
-		chrome.tabs.create({
-			url:'http://pbl.link'
+function createTab(tab_url){
+	chrome.tabs.create({
+			url: tab_url
 		});
-		chrome.tabs.create({
-			url:'http://youtube.com'
-		});
-		chrome.tabs.create({
-			url:'http://messenger.com'
-		});
-		chrome.tabs.create({
-			url:'http://pbl.link/wd-drive'
-		});
-		chrome.tabs.create({
-			url:'http://pbl.link/links-trello'
-		});
-		chrome.tabs.create({
-			url:'http://pbl.link/mission'
-		});
+}
+
+function pullBundles(email){
+	params = "email="+email
+	url = root_url + 'chrome/my_bundles' + '?' + params
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	showSpinner();
+	// Response handlers.
+	xhr.onload = function() {
+		hideSpinner();
+		var text = xhr.responseText;
+		bundles = JSON.parse(text);
+		console.log(bundles);
+		$('#bundles-area').html('');
+		for(var i=0;i<bundles.length;i++){
+
+			bundle = bundles[i];
+			bundleLink = document.createElement('a');
+			$(bundleLink).text(bundle.attributes['name']);
+			$(bundleLink).attr('id', bundle.attributes['keys'].join(','));
+			$(bundleLink).attr('class', 'bundle-link');
+
+			bundleDiv = document.createElement('div');
+			$(bundleDiv).append(bundleLink);
+			$('#bundles-area').append(bundleDiv);
+		}
+		activateBundleLinks();
+
+		
+	};
+	xhr.onerror = function() {
+		hideSpinner();
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: unable to pull bundles</h3>');
+	};
+	xhr.send();
+}
+function toggleBundles(email){
+	$("#bundles-toggle").click(function(){
+		$("#bundles-container").slideToggle("fast");
+		pullBundles(email);
 	});
 }
-activateBundles();
-
+function activateBundleLinks(){
+	$('.bundle-link').click(function(){
+		showSpinner();
+		urls = $(this).attr('id').split(',');
+		for(var i=0;i<urls.length;i++){
+			createTab('http://pbl.link/'+urls[i]);
+		}
+		hideSpinner();
+	});
+}
 
 function showSpinner(){
 	$('#loading-spinner').show();
@@ -294,6 +330,7 @@ chrome.identity.getProfileUserInfo(function(userInfo) {
     $('#chrome-email-span').text(email);
     pullFavoriteLinks(email);
     activateSaveButton(email);
+    toggleBundles(email);
     //pull favorite links
 });
 activateToggles();

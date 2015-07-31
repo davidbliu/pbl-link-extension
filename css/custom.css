@@ -43,6 +43,12 @@ section { padding: 5px;}
 #search-toggle:hover{
 	cursor:pointer;
 }
+#bundles-toggle:hover{
+	cursor:pointer;
+}
+#bundles-container{
+	display:none;
+}
 #add-container{
 	display:none;
 }
@@ -54,6 +60,9 @@ section { padding: 5px;}
 }
 #favorite-links-container{
 	display:none;
+}
+.bundle-link:hover{
+	cursor:pointer;
 }
 
 .main-container{
