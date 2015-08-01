@@ -39,19 +39,21 @@ function pullBundles(email){
 		bundles = JSON.parse(text);
 		console.log(bundles);
 		$('#bundles-area').html('');
+		bundle_hash = {};
 		for(var i=0;i<bundles.length;i++){
 
 			bundle = bundles[i];
 			bundleLink = document.createElement('a');
 			$(bundleLink).text(bundle.attributes['name']);
-			$(bundleLink).attr('id', bundle.attributes['keys'].join(','));
+			// $(bundleLink).attr('id', bundle.attributes['urls'].join(','));
+			bundle_hash[bundle.attributes['name']] = bundle.attributes['urls'];
 			$(bundleLink).attr('class', 'bundle-link');
 
 			bundleDiv = document.createElement('div');
 			$(bundleDiv).append(bundleLink);
 			$('#bundles-area').append(bundleDiv);
 		}
-		activateBundleLinks();
+		activateBundleLinks(bundle_hash);
 
 		
 	};
@@ -68,17 +70,59 @@ function toggleBundles(email){
 		pullBundles(email);
 	});
 }
-function activateBundleLinks(){
+function activateBundleLinks(bundle_hash){
 	$('.bundle-link').click(function(){
 		showSpinner();
-		urls = $(this).attr('id').split(',');
+		// urls = $(this).attr('id').split(',');
+		urls = bundle_hash[$(this).text()];
 		for(var i=0;i<urls.length;i++){
-			createTab('http://pbl.link/'+urls[i]);
+			createTab(urls[i]);
 		}
 		hideSpinner();
 	});
 }
 
+function createBundle(name, email, urls){
+	// send post request to create bundles
+	params = "email="+email + "&urls="+encodeURIComponent(urls)+'&name='+name;
+	url = root_url + 'chrome/create_bundle' + '?' + params
+	var xhr = createCORSRequest('POST', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	showSpinner();
+	// Response handlers.
+	xhr.onload = function() {
+		hideSpinner();
+		var text = xhr.responseText;
+		$('#message').html(text);
+	};
+	xhr.onerror = function() {
+		hideSpinner();
+		var text = xhr.responseText;
+		$('#message').html('<h3>Error: unable to create bundle</h3>');
+	};
+	xhr.send();
+}
+function activateBundleInput(email){
+	$('#bundle-input').keypress(function(e) {
+	    if(e.which == 13) {
+	    	bundle_name = $(this).val();
+	    	$(this).val('');
+	    	console.log(bundle_name);
+	    	chrome.tabs.query({
+			    lastFocusedWindow: true     // In the current window
+			}, function(tabs) {
+				urls = [];
+				for(var i=0;i<tabs.length;i++){
+					urls.push(tabs[i].url);
+				}
+				createBundle(bundle_name, email, urls);
+			});
+	    }
+	});
+}
 function showSpinner(){
 	$('#loading-spinner').show();
 }
@@ -331,6 +375,7 @@ chrome.identity.getProfileUserInfo(function(userInfo) {
     pullFavoriteLinks(email);
     activateSaveButton(email);
     toggleBundles(email);
+    activateBundleInput(email);
     //pull favorite links
 });
 activateToggles();
