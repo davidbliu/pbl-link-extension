@@ -18,6 +18,10 @@ button{
 input[type='text']{
 	margin-bottom:5px;
 }
+#message-container{
+	border-bottom:1px solid rgba(0,0,0,0.1);
+	padding-bottom:15px;
+}
 .btn-container{
 	margin-top:10px;
 	margin-bottom:10px;
@@ -30,11 +34,14 @@ section { padding: 5px;}
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); }
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:window-inactive  { background: red; }
-
+#top-frame-div{
+	border-bottom:1px solid rgba(0,0,0,0.1);
+	padding-bottom:20px;
+}
 #add-toggle:hover{
 	cursor:pointer;
 }
-#favorite-toggle:hover{
+#most-used-toggle:hover{
 	cursor:pointer;
 }
 #create-directory-toggle:hover{
@@ -58,7 +65,7 @@ section { padding: 5px;}
 #search-container{
 	display:none;
 }
-#favorite-links-container{
+#most-used-container{
 	display:none;
 }
 .bundle-link:hover{
@@ -71,6 +78,10 @@ section { padding: 5px;}
 	background-color:rgba(100,100,100,0.1);
 	padding:10px;
 
+}
+
+#credits-container{
+	font-size:10px;
 }
 .smalltext{
 	font-size:10px;

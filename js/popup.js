@@ -66,8 +66,13 @@ function pullBundles(email){
 }
 function toggleBundles(email){
 	$("#bundles-toggle").click(function(){
-		$("#bundles-container").slideToggle("fast");
-		pullBundles(email);
+		if ($( "#bundles-container" ).is( ":visible" )){
+			$('#bundles-container').hide('fast');
+		}
+		else{
+			$('#bundles-container').show('fast');
+			pullBundles(email);
+		}
 	});
 }
 function activateBundleLinks(bundle_hash){
@@ -82,9 +87,9 @@ function activateBundleLinks(bundle_hash){
 	});
 }
 
-function createBundle(name, email, urls){
+function createBundle(name, email, urls,titles){
 	// send post request to create bundles
-	params = "email="+email + "&urls="+encodeURIComponent(urls)+'&name='+name;
+	params = "email="+email + "&urls="+encodeURIComponent(urls)+'&name='+name+"&titles="+encodeURIComponent(titles);
 	url = root_url + 'chrome/create_bundle' + '?' + params
 	var xhr = createCORSRequest('POST', url);
 	if (!xhr) {
@@ -115,10 +120,12 @@ function activateBundleInput(email){
 			    lastFocusedWindow: true     // In the current window
 			}, function(tabs) {
 				urls = [];
+				titles = [];
 				for(var i=0;i<tabs.length;i++){
 					urls.push(tabs[i].url);
+					titles.push(tabs[i].title.replace(',', ''))
 				}
-				createBundle(bundle_name, email, urls);
+				createBundle(bundle_name, email, urls,titles);
 			});
 	    }
 	});
@@ -134,32 +141,6 @@ function activateSearch(){
 	    if(e.which == 13) {
 	       pullSearchData();
 	    }
-	});
-}
-
-function stripText(text){
-	return text.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-');
-}
-function labelAddActions(){
-	$('#tags-input').keypress(function(e) {
-	    if(e.which == 13) {
-	       tag = $('#tags-input').val();
-	       // tag = stripText(tag);
-	       $(this).val("");
-	       htmlTag = document.createElement('div');
-	       $(htmlTag).addClass('label');
-	       $(htmlTag).addClass('label-default');
-	       $(htmlTag).addClass('tag-label');
-	       $(htmlTag).text(tag);
-	       $(htmlTag).append('&nbsp;<a class = "label-remove-link" href = "javascript:void(0);">x</a>');
-	       $('#tags-container').prepend(htmlTag);
-	       removeLabelActions();
-	    }
-	});
-}
-function removeLabelActions(){
-	$('.label-remove-link').click(function(){
-		$(this).parent().remove();
 	});
 }
 
@@ -190,15 +171,6 @@ function activateToggles(){
 	$('#add-toggle').click(function(){
 		$('#add-container').slideToggle("fast");
 	});
-	$('#create-directory-toggle').click(function(){
-		$('#create-directory-container').slideToggle("fast");
-	});
-	$('#search-toggle').click(function(){
-		$('#search-container').slideToggle("fast");
-	});
-	$('#favorite-toggle').click(function(){
-		$('#favorite-links-container').slideToggle("fast");
-	});
 }
 
 
@@ -222,6 +194,7 @@ function pullSearchData(){
 		for(var i=0 ;i<results.length;i++){
 			var searchResult = document.createElement('div');
 			var searchLink = document.createElement('a');
+			console.log(results[i].attributes);
 			$(searchLink).text("pbl.link/" + results[i].attributes.key);
 			$(searchLink).attr('href', 'http://pbl.link/'+results[i].attributes.key);
 			$(searchLink).attr('target', '_blank');
@@ -240,20 +213,22 @@ function pullSearchData(){
 	};
 	xhr.send();
 }
+
 function activateSaveButton(email){
 $("#save").click(function(){
 	$('#message').html('<h3>Saving link...</h3>');
 	key = $('#key-input').val();
 	url = $('#url-input').val();
-	description = $('#description-input').val();
+	desc = $('#description-input').val();
+	description = desc.split('#')[0];
+	splits = desc.split('#');
 	tags = [];
-	$('.tag-label').each(function(){
-		tags.push($(this).text().substring(0, $(this).text().length-2));
-	});
-	directory = $('#directory-input').val();
-	directory = $('#directories-dropdown').find(":selected").attr('id');
+	for(var i=1;i<splits.length;i++){
+		tags.push(splits[i].trim());
+	}
 
-	params = "key="+key+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+'&tags='+encodeURIComponent(tags.join(','))+'&email='+email;
+
+	params = "key="+encodeURIComponent(key)+"&url="+encodeURIComponent(url)+"&description="+encodeURIComponent(description)+'&tags='+encodeURIComponent(tags.join(','))+'&email='+email;
 	url = root_url + 'chrome/create_go_link' + '?' + params
 	var xhr = createCORSRequest('POST', url);
 	if (!xhr) {
@@ -279,11 +254,12 @@ $("#save").click(function(){
 });
 }
 function activateUndoButton(){
-	$('#undo-btn').click(function(){
+	$('.undo-btn').click(function(){
 		console.log('undo button has been clicked');
 		$('#message').html('<h3>Undoing...</h3>');
-		key = $('#key-input').val();
-		params = "key="+key;
+		// id = $('#key-input').val();
+		id = $(this).attr('id');
+		params = "id="+id;
 		url = root_url + 'chrome/undo_create_go_link' + '?' + params
 		var xhr = createCORSRequest('POST', url);
 		if (!xhr) {
@@ -332,8 +308,19 @@ function lookupURL(){
 	xhr.send();
 }
 
-function pullFavoriteLinks(email){
-	url = root_url+'chrome/favorite_links'
+function activateMostUsedToggle(email){
+	$('#most-used-toggle').click(function(){
+		if ($( "#most-used-container" ).is( ":visible" )){
+			$('#most-used-container').hide('fast');
+		}
+		else{
+			$('#most-used-container').show('fast');
+			pullMostUsedLinks(email);
+		}
+	});
+}
+function pullMostUsedLinks(email){
+	url = root_url+'chrome/most_used_links'
 	url += "?email="+email
 	var xhr = createCORSRequest('GET', url);
 	if (!xhr) {
@@ -341,13 +328,16 @@ function pullFavoriteLinks(email){
 		return;
 	}
 	// Response handlers.
+	showSpinner();
 	xhr.onload = function() {
+		hideSpinner();
 		var text = xhr.responseText;
-		$('#favorite-links-container').append(text);
+		$('#most-used-container').append(text);
 	};
 	xhr.onerror = function() {
+		hideSpinner();
 		var text = xhr.responseText;
-		$('#favorite-links-container').html('<p>Error: unable to retrieve favorite links</p>');
+		$('#most-used-container').html('<p>Error: unable to retrieve most used links</p>');
 	};
 	xhr.send();
 }
@@ -371,11 +361,11 @@ chrome.identity.getProfileUserInfo(function(userInfo) {
  /* Use userInfo.email, or better (for privacy) userInfo.id
     They will be empty if user is not signed in in Chrome */
     email = userInfo.email;
-    $('#chrome-email-span').text(email);
-    pullFavoriteLinks(email);
+    $('#chrome-email-link').text(email);
     activateSaveButton(email);
     toggleBundles(email);
     activateBundleInput(email);
+    activateMostUsedToggle(email);
     //pull favorite links
 });
 activateToggles();

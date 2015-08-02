@@ -3,12 +3,17 @@
 	"name": "PBL Link Adder",
 	"description": "A fast adder tool for PBL Links",
 	"version": "1.0",
+	"background": {
+	    "scripts": ["js/jquery-2.0.3.min.js", "background.js"]
+	  },
 	"permissions": [
 		"storage",
 		"activeTab",
 		"tabs",
 		"identity",
-		"identity.email"
+		"identity.email",
+		"http://*/",
+        "https://*/"
 	],
 	"icons": { 
 		"16": "pbl-logo-circle.png",

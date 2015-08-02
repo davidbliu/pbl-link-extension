@@ -19,50 +19,26 @@
 	<body>
 	
 
-	<img src = 'pbl-logo-circle.png' height=35></img>
-    <h1>PBL Links</h1>
+	<div id = 'top-frame-div' style = 'text-align:center'><img src = 'pbl-logo-circle.png' height=35></img><img src = 'link-circle.png' height = 35 style = 'margin-left:15px'></img></div>
+    <h1>PBL <span style = 'color:green'>Link</span></h1>
+    <div id = 'message-container'>
     <div id = 'message'></div>
-    <div id = 'message2'></div>
     <img id = 'loading-spinner' src = 'loading_spinner.gif' height=50 style = 'display:none'></img>
+	</div>
+    
+    
     <h5 id = 'add-toggle'>Add a PBL Link</h5>
     <div id = 'add-container' class = 'main-container well'>
-    	<p class = 'smalltext text-muted'>Please refer to the PBL Links guide for naming conventions. Keys should be alphanumeric-hyphen-separated-words. If the namespace you want is common, consider attaching your committee and appending the semester (ex: ht-drive-fa14). We recommend using lowercase because PBL Links is case sensitive.</p>
+ 
 	    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
 	    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
-	    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description'></input>
-	    <!-- <div id = 'directory-input-container'></div> -->
-	    <div id = 'tags-container'></div>
-	    <input class = 'form-control' id = 'tags-input' type = 'text' placeholder = 'tags: start typing and click enter'></input>
-
-
+       	<p class = 'smalltext text-muted'>#tags should be added after the description (example: this is a description and #these #are #tags</p>
+	    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description and #tags'></input>
 	    <div class = 'btn-container'>
 	    	<button class = 'btn btn-primary' id = "save">Add New Link</button>
 		</div>
-
-		<!-- <p class = 'smalltext text-muted'>If you can't find the right directory for your PBL Link consider creating a new directory.</p>
-
-		<h5 id = 'create-directory-toggle'>Create New Directory</h5>
-		<div id = 'create-directory-container'>
-			<p class = 'smalltext text-muted'>Directories can only be three levels deep and should follow the same naming conventions as Links (alphanumeric-hyphen-separated-words)</p>
-			<input class = 'form-control' id = 'create-directory-input' type = 'text' placeholder = 'Example: /historian/fall-2014'></input>
-			<button class = 'btn btn-primary' id = "create-directory-btn"> Create Directory</button>
-
-		</div> -->
     </div>
 	
-	<h5 id = 'search-toggle'>Search for Links</h5>
-	<div id = 'search-container' class = 'main-container'>
-		<p class = 'smalltext text-muted'>Note: Freshly added PBL Links may not be exposed to fulltext search immediately. Please allow 7 hours for fulltext search.</p>
-		<input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input>
-		<p id = 'search-results'></p>
-		
-	</div>
-
-	<h5 id = 'favorite-toggle'>Favorite Links</h5>
-	
-	<div id = 'favorite-links-container' class = 'main-container'>
-		<div id = 'favorite-links-message'><p class = 'smalltext text-muted'>Note: your favorite links are being pulled using your chrome account email: <b id = 'chrome-email-span'>{{email}}</b>. If this does not match your Portal email, add your chrome email to the Portal to sync up favorite links! (visit <a href = 'http://pbl.link/chrome-sync' target = '_blank'>pbl.link/chrome-sync</a> for steps)</p></div>
-	</div>
 
 	<h5 id = 'bundles-toggle'>My Bundles</h5>
 	<div id = 'bundles-container' class = 'main-container'>
@@ -71,16 +47,29 @@
 		</p>
 		<div id = 'bundles-area'></div>
 		<p class = 'text-muted smalltext'>
-			Create a new bundle from your current tabs by giving it a name below
+			Create a new bundle from your current tabs by giving it a name below. Using a pre-existing name will overrite the old bundle.
 		</p>
 		<input class = 'form-control' id = 'bundle-input' type = 'text' placeholder = 'Type a bundle name and hit "enter"'></input>
 	</div>
 
-	<footer class="footer" style = 'margin-top:15px; border-top:1px solid rgba(0,0,0,0.1);'>
-      <div class="container">
 
-            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.8</div></p>
-            <a href = 'http://pbl.link' target = '_blank'>See Full PBL Link Catalogue at pbl.Link</a>
+
+	<h5 id = 'most-used-toggle'>My Recent Links</h5>
+	
+	<div id = 'most-used-container' class = 'main-container'>
+		<div id = 'most-used-message'><p class = 'smalltext text-muted'>Your list of recently visited golinks is synced with your chrome email <a href = "#" id = 'chrome-email-link'>email</a></p></div>
+	</div>
+
+	<footer class="footer" style = 'margin-top:15px;'>
+
+		<input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input>
+		<p id = 'search-results'></p>
+
+      <div class="container" id = 'credits-container'>
+            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.81</div>
+            <div><a href = 'http://pbl.link' target = '_blank'>See Full PBL Link Catalogue at PBL.Link</a></div>
+            </p>
+            
       </div>
     </footer>
     <script src = 'js/popup.js'></script>
