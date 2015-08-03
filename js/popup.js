@@ -328,20 +328,50 @@ function pullMostUsedLinks(email){
 		return;
 	}
 	// Response handlers.
+	$('#most-used-area').html('');
 	showSpinner();
 	xhr.onload = function() {
 		hideSpinner();
 		var text = xhr.responseText;
-		$('#most-used-container').append(text);
+		$('#most-used-area').append(text);
 	};
 	xhr.onerror = function() {
 		hideSpinner();
 		var text = xhr.responseText;
-		$('#most-used-container').html('<p>Error: unable to retrieve most used links</p>');
+		$('#most-used-area').html('<p>Error: unable to retrieve most used links</p>');
+	};
+	xhr.send();
+}
+function resolveChromeEmail(chromeEmail){
+	params = "chrome_email="+encodeURIComponent(chromeEmail);
+	url = root_url + 'chrome/resolve_chrome_email' + '?' + params
+	var xhr = createCORSRequest('GET', url);
+	if (!xhr) {
+		$('#message').html('<h3>CORS not supported</h3>');
+		return;
+	}
+	showSpinner();
+	// Response handlers.
+	xhr.onload = function() {
+		hideSpinner();
+		var email = xhr.responseText;
+		$('#chrome-email-link').text(email);
+	    activateSaveButton(email);
+	    toggleBundles(email);
+	    activateBundleInput(email);
+	    activateMostUsedToggle(email);
+	};
+	xhr.onerror = function() {
+		hideSpinner();
+		var text = xhr.responseText;
+		$('#message').html('<h4>Unable to lookup chrome email</h4>');
 	};
 	xhr.send();
 }
 
+/**
+THIS SECTION CONTAINS THE BOTTOM STUFF
+*/
 // var root_url = "http://localhost:3000/"
 var root_url = 'http://testing.berkeley-pbl.com/'
 var tab_title = ''
@@ -352,7 +382,6 @@ chrome.tabs.getSelected(null,function(tab) {
     	tab_title = tab.title;
     	//add title to the form
     	tab_title = tab_title.toLowerCase().replace(/[^a-zA-Z0-9 -]/g, '').replace(/ /g,'-').split('--')[0];//replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()?\''\""\|]/g,"")
-
     	$('#key-input').val(tab_title);
 });
 
@@ -361,15 +390,11 @@ chrome.identity.getProfileUserInfo(function(userInfo) {
  /* Use userInfo.email, or better (for privacy) userInfo.id
     They will be empty if user is not signed in in Chrome */
     email = userInfo.email;
-    $('#chrome-email-link').text(email);
-    activateSaveButton(email);
-    toggleBundles(email);
-    activateBundleInput(email);
-    activateMostUsedToggle(email);
+    resolveChromeEmail(email);
     //pull favorite links
 });
 activateToggles();
-activateSearch();
+// activateSearch();
 labelAddActions();
 
 

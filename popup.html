@@ -19,19 +19,28 @@
 	<body>
 	
 
-	<div id = 'top-frame-div' style = 'text-align:center'><img src = 'pbl-logo-circle.png' height=35></img><img src = 'link-circle.png' height = 35 style = 'margin-left:15px'></img></div>
-    <h1>PBL <span style = 'color:green'>Link</span></h1>
-    <div id = 'message-container'>
-    <div id = 'message'></div>
-    <img id = 'loading-spinner' src = 'loading_spinner.gif' height=50 style = 'display:none'></img>
+	<div id = 'top-area'>
+		<div id = 'top-frame-div' style = 'text-align:center'><img src = 'pbl-logo-circle.png' height=35></img><img src = 'link-circle.png' height = 35 style = 'margin-left:15px'></img></div>
+	    <h1>PBL <span style = 'color:green'>Link</span></h1>
+	    <div id = 'message-container'>
+	    <div id = 'message'></div>
+	    <img id = 'loading-spinner' src = 'loading_spinner.gif' height=50 style = 'display:none'></img>
+		</div>
 	</div>
+	<!-- end of top area -->
     
-    
+<div id = 'bottom-area'>
     <h5 id = 'add-toggle'>Add a PBL Link</h5>
-    <div id = 'add-container' class = 'main-container well'>
+    <div id = 'add-container' class = 'main-container well1'>
  
-	    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'></input>
-	    <input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'></input>
+ 		<div class = 'input-group add-input-group'>
+	 		<div class="input-group-addon" style = 'background-color:white'>URL</div>
+		    <input class = 'form-control' id = 'url-input' type = 'text' placeholder = 'url'>
+		</div>
+		<div class = 'input-group add-input-group'>
+			<div class="input-group-addon" style = 'background-color:white'>Key</div>
+	    	<input class = 'form-control' id = 'key-input' type = 'text' placeholder = 'key'>
+	    </div>
        	<p class = 'smalltext text-muted'>#tags should be added after the description (example: this is a description and #these #are #tags</p>
 	    <input class = 'form-control' id = 'description-input' type = 'text' placeholder = 'description and #tags'></input>
 	    <div class = 'btn-container'>
@@ -58,15 +67,19 @@
 	
 	<div id = 'most-used-container' class = 'main-container'>
 		<div id = 'most-used-message'><p class = 'smalltext text-muted'>Your list of recently visited golinks is synced with your chrome email <a href = "#" id = 'chrome-email-link'>email</a></p></div>
+		<div id = 'most-used-area'>
+		</div>
 	</div>
+</div>
+<!-- end of bottom area -->
 
-	<footer class="footer" style = 'margin-top:15px;'>
+	<footer class="footer">
 
-		<input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input>
-		<p id = 'search-results'></p>
+		<!-- <input type = 'text' id = 'search-input' class = 'form-control' placeholder='Search and click "Enter"'></input> -->
+		<!-- <p id = 'search-results'></p> -->
 
       <div class="container" id = 'credits-container'>
-            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.81</div>
+            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.9</div>
             <div><a href = 'http://pbl.link' target = '_blank'>See Full PBL Link Catalogue at PBL.Link</a></div>
             </p>
             
