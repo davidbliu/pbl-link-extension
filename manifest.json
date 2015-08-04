@@ -6,6 +6,7 @@
 	"background": {
 	    "scripts": ["js/jquery-2.0.3.min.js", "background.js"]
 	  },
+	"omnibox": { "keyword" : "go" },
 	"permissions": [
 		"storage",
 		"activeTab",
