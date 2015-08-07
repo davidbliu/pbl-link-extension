@@ -26,7 +26,7 @@
 			"19": "pbl-logo-circle.png",          
 			"38": "pbl-logo-circle.png"          
 		},
-		"default_popup": "popup.html"
+		"default_popup": "better_popup.html"
 	},
 	"content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
 	"web_accessible_resources": [

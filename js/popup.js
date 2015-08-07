@@ -371,7 +371,7 @@ function resolveChromeEmail(chromeEmail){
 
 /**
 THIS SECTION CONTAINS THE BOTTOM STUFF
-*/
+// */
 // var root_url = "http://localhost:3000/"
 var root_url = 'http://testing.berkeley-pbl.com/'
 var tab_title = ''

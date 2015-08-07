@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+	<head>
+	    <meta charset="utf-8">
+		<meta name="description" content="A Fast Adder for Creating PBL Links">
+		<meta name="author" content="David Liu">
+		
+		<title>PBL Links</title>
+		
+		<!-- Scripts -->
+		<script src="js/jquery-2.0.3.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		
+		<!-- Cascading Style Sheets -->
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/better_custom.css" rel="stylesheet" media="screen">		
+	</head>
+	
+	<body>
+	
+   <div id = 'top-area'>
+		<div id = 'top-frame-div' style = 'text-align:center'><img src = 'pbl-logo-circle.png' height=35></img><img src = 'link-circle.png' height = 35 style = 'margin-left:15px'></img></div>
+	    <div id = 'spacer' style = 'height:20px'>
+		</div>
+	</div>
+
+	<div id = 'lookup-stuff'>
+		<h6>Existing PBL Links for this URL</h6>
+		<img id = 'loading-spinner' src = 'loading_spinner.gif' height=35 style = 'display:none'></img>
+		<div id = 'lookup-container'></div>
+	</div>
+
+	<div id = 'guidelines'>
+		<h6>Quickstart guide to PBL Links</h6>
+		<ul class = 'text-muted smalltext list-group'>
+			<li class = 'list-group-item'>Search PBL Links by typing "go" into your browser and then the key or search term</li>
+			<li class = 'list-group-item'>Add a PBL Link by first typing "go" and then "add:" followed by the key you want for your link</li>
+			<li class = 'list-group-item'>Lookup if the current page is already a PBL Link by clicking this icon</li>
+		</ul>
+	</div>
+	<footer class="footer">
+      <div class="container" id = 'credits-container'>
+            <p class="text-muted"><div class = "text-muted">Created by PBL WD Fall 2015</div><div class = "text-muted">Version 0.92</div>
+            <div><a href = 'http://pbl.link' target = '_blank'>See Full PBL Link Catalogue at PBL.Link</a></div>
+            </p>
+            
+      </div>
+    </footer>
+    <script src = 'js/better_popup.js'></script>
+
+	</body>
+</html>
