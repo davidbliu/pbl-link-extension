@@ -3,7 +3,9 @@
  * Custom CSS
  *	
  */
-
+html{
+	width:300px;
+}
 body, section {			/* Change width and height to own preferences */
 	width: 300px;
 	/*height: 400px;*/
@@ -12,16 +14,33 @@ body, section {			/* Change width and height to own preferences */
 body{
 	padding:15px;
 }
-/*#guidelines{
-	padding:15px;
-}*/
 
+
+#page-card-container{
+  clear:both;
+  display:inline-block;
+}
+.page-card{
+  padding:15px;
+  float:left;
+  text-align:center;
+  /*margin:10px;*/
+}
+.page-card>a{
+  color:black;
+}
+.page-card:hover{
+	cursor:pointer;
+}
 
 /* Scroll Bar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); }
 ::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb:window-inactive  { background: red; }
-#add-toggle:hover{
+
+
+
+/*#add-toggle:hover{
 	cursor:pointer;
 }
 #most-used-toggle:hover{
@@ -39,9 +58,6 @@ body{
 #bundles-container{
 	display:none;
 }
-#add-container{
-	/*display:none;*/
-}
 #create-directory-container{
 	display:none;
 }
@@ -56,13 +72,14 @@ body{
 }
 .add-input-group{
 	margin-bottom:5px;
-}
+}*/
+
 .main-container{
 	border:1px solid rgba(0,0,0,0.1);
 	border-radius:3px;
 	background-color:rgba(100,100,100,0.1);
 	padding:10px;
-
+	width:300px;
 }
 
 #credits-container{
