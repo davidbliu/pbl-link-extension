@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "PBL Links",
-	"description": "A fast adder tool for PBL Links",
+	"description": "PBLs very own url shortener and resource management app",
 	"version": "1.0",
 	"background": {
 	    "scripts": ["js/jquery-2.0.3.min.js", "background.js"]
